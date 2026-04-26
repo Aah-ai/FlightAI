@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Checkout</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+            color: white;
+
+            background-image: url("https://images.unsplash.com/photo-1502920514313-52581002a659");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* dark overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: -1;
+        }
+
+        /* MAIN CONTAINER */
+        .checkout-container {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        /* LEFT: SUMMARY */
+        .summary {
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .summary h2 {
+            margin-top: 0;
+        }
+
+        .summary p {
+            margin: 8px 0;
+        }
+
+        /* RIGHT: PAYMENT */
+        .payment {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            color: black;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .payment h2 {
+            margin-top: 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: orange;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: darkorange;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="checkout-container">
+
+    <!-- LEFT SIDE: FLIGHT SUMMARY -->
+    <div class="summary">
+        <h2>✈ Flight Summary</h2>
+
+        <p><b>From:</b> {{ data.from }}</p>
+        <p><b>To:</b> {{ data.to }}</p>
+        <p><b>Class:</b> {{ data.class }}</p>
+        <p><b>Hotel:</b> {{ data.hotel }}</p>
+
+        <p class="price">Total: {{ data.total }} AED</p>
+    </div>
+
+    <!-- RIGHT SIDE: PAYMENT -->
+    <div class="payment">
+        <h2>💳 Payment Details</h2>
+
+        <form action="/confirm_payment" method="POST">
+
+            <input type="text" placeholder="Card Holder Name" required>
+            <input type="text" placeholder="Card Number" required>
+            <input type="text" placeholder="Expiry Date (MM/YY)" required>
+            <input type="text" placeholder="CVV" required>
+
+            <button type="submit">Pay & Generate Ticket ✈</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

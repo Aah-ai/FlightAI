@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <h2>✈ My Bookings</h2>
+    <button onclick="window.location.href='/'">Back</button>
+</div>
+
+<div class="hero">
+
+    {% if bookings and bookings|length > 0 %}
+
+    <table border="1" style="width:90%; margin:auto;">
+        <tr>
+            <th>Airline</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Class</th>
+            <th>Hotel</th>
+            <th>Total</th>
+        </tr>
+
+        {% for b in bookings %}
+        <tr>
+            <td>{{ b["airline"] }}</td>
+            <td>{{ b["from"] }}</td>
+            <td>{{ b["to"] }}</td>
+            <td>{{ b["class"] }}</td>
+            <td>{{ b["hotel"] }}</td>
+            <td>{{ b["total"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+        <p>No bookings yet ✈</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

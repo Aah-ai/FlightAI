@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FlightGuide</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: white;
+
+            background-image: url("https://images.unsplash.com/photo-1502920514313-52581002a659");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* DARK OVERLAY */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: -1;
+        }
+
+        header {
+            background: rgba(255, 165, 0, 0.9);
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            margin: 25px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 6px;
+            border: none;
+            width: 160px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: orange;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: darkorange;
+        }
+
+        .flights-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 120px;
+        }
+
+        /* ✈️ FLIGHT CARD (GLASS STYLE) */
+        .flight-card {
+            background: rgba(255, 255, 255, 0.92);
+            color: black;
+            width: 300px;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+        /* 🤖 CHATBOT */
+        #chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: rgba(255,255,255,0.95);
+            color: black;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+            padding: 10px;
+        }
+
+        #messages {
+            height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+            text-align: left;
+            padding: 5px;
+        }
+
+        #userInput {
+            width: 70%;
+            padding: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>✈ FlightGuide Airlines</header>
+
+<!-- SEARCH -->
+<div class="search-box">
+    <form action="/search" method="POST">
+        <input name="from" placeholder="From" required>
+        <input name="to" placeholder="To" required>
+        <button type="submit">Search Flights</button>
+    </form>
+</div>
+
+<!-- FLIGHTS -->
+<div class="flights-container">
+
+{% if flights %}
+    {% for f in flights %}
+
+    <div class="flight-card">
+
+        <h3>{{ f.airline }}</h3>
+
+        <p><b>From:</b> {{ f.from }}</p>
+        <p><b>To:</b> {{ f.to }}</p>
+        <p><b>Class:</b> {{ f.class }}</p>
+        <p><b>Hotel:</b> {{ f.hotel }}</p>
+
+        <p class="price">{{ f.price }} AED</p>
+
+        <form action="/pay" method="POST">
+            <input type="hidden" name="airline" value="{{ f.airline }}">
+            <input type="hidden" name="from" value="{{ f.from }}">
+            <input type="hidden" name="to" value="{{ f.to }}">
+            <input type="hidden" name="class" value="{{ f.class }}">
+            <input type="hidden" name="hotel" value="{{ f.hotel }}">
+            <input type="hidden" name="total" value="{{ f.price }}">
+
+            <button type="submit">Book ✈</button>
+        </form>
+
+    </div>
+
+    {% endfor %}
+{% endif %}
+
+</div>
+
+<!-- 🤖 CHATBOT -->
+<div id="chatbox">
+    <h4>FlightGuide Assistant 🤖</h4>
+
+    <div id="messages"></div>
+
+    <input id="userInput" type="text" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+function sendMessage() {
+    let input = document.getElementById("userInput");
+    let message = input.value;
+
+    if (!message) return;
+
+    let messages = document.getElementById("messages");
+
+    messages.innerHTML += "<div><b>You:</b> " + message + "</div>";
+
+    fetch("/chatbot", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+        messages.innerHTML += "<div><b>Bot:</b> " + data.reply + "</div>";
+        messages.scrollTop = messages.scrollHeight;
+    });
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>

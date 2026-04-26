@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Success</title>
+
+<style>
+body {
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial;
+}
+
+.box {
+    text-align:center;
+    animation: pop 0.6s ease;
+}
+
+@keyframes pop {
+    from {transform:scale(0);}
+    to {transform:scale(1);}
+}
+
+button {
+    padding:10px;
+    margin:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>✔ Payment Successful</h1>
+
+    <a href="/ticket"><button>Download Ticket 🎟️</button></a>
+    <a href="/"><button>Home</button></a>
+</div>
+
+</body>
+</html>
